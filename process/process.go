@@ -16,11 +16,11 @@ func GetSqlFiles(dir, priority, ext string) ([]string, error) {
 
 	files := []string{}
 	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
-		nm := info.Name()
 		if info.IsDir() {
 			return nil
 		}
 
+		nm := info.Name()
 		fext := filepath.Ext(nm)
 		if fext != "."+ext { // not the file we're looking for.
 			return nil

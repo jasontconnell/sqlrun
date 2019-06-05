@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	configFile := flag.String("config", "config.json", "config file with connection string")
 	dir := flag.String("dir", "", "the directory to recursively search")
 	p := flag.String("p", "", "priority prefixes. like tbl,Save,Get,Delete for filenames")
 	flag.Parse()
@@ -24,7 +25,7 @@ func main() {
 		fmt.Println("Got error getting sql files", err)
 	}
 
-	cfg := config.LoadConfig("config.json")
+	cfg := config.LoadConfig(*configFile)
 	err = process.RunAll(cfg.ConnectionString, files)
 	if err != nil {
 		fmt.Println(err)

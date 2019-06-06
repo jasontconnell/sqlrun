@@ -2,10 +2,10 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/jasontconnell/sqlrun/config"
 	"github.com/jasontconnell/sqlrun/process"
 	"os"
+	"log"
 )
 
 func main() {
@@ -20,17 +20,15 @@ func main() {
 	}
 
 	files, err := process.GetSqlFiles(*dir, *p, "sql")
-
 	if err != nil {
-		fmt.Println("Got error getting sql files", err)
+		log.Fatal("Got error getting sql files, ", err)
 	}
 
 	cfg := config.LoadConfig(*configFile)
 	err = process.RunAll(cfg.ConnectionString, files)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 
-	fmt.Println("done")
+	log.Println("done")
 }

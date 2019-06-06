@@ -2,7 +2,7 @@ package process
 
 import (
 	"database/sql"
-	"fmt"
+	"log"
 	_ "github.com/denisenkom/go-mssqldb"
 	"github.com/pkg/errors"
 	"io/ioutil"
@@ -24,7 +24,7 @@ func RunAll(connstr string, paths []string) error {
 }
 
 func Run(connstr, path string) error {
-	fmt.Println(path)
+	log.Println(path)
 	contents, err := ioutil.ReadFile(path)
 
 	if err != nil {

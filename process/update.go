@@ -2,11 +2,13 @@ package process
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
-	_ "github.com/denisenkom/go-mssqldb"
-	"github.com/pkg/errors"
-	"io/ioutil"
+	"os"
+	"path/filepath"
 	"regexp"
+
+	_ "github.com/denisenkom/go-mssqldb"
 )
 
 var sepreg *regexp.Regexp = regexp.MustCompile(`\W(?i)go\W`)
@@ -16,7 +18,7 @@ func RunAll(connstr string, paths []string) error {
 	for _, f := range paths {
 		err = Run(connstr, f)
 		if err != nil {
-			return errors.Wrapf(err, "executing %s", f)
+			return fmt.Errorf("executing %s. %w", f, err)
 		}
 	}
 
@@ -24,16 +26,17 @@ func RunAll(connstr string, paths []string) error {
 }
 
 func Run(connstr, path string) error {
-	log.Println(path)
-	contents, err := ioutil.ReadFile(path)
+	_, fn := filepath.Split(path)
+	log.Println(fn)
+	contents, err := os.ReadFile(path)
 
 	if err != nil {
-		return errors.Wrapf(err, "couldn't open file %s", path)
+		return fmt.Errorf("couldn't open file %s. %w", path, err)
 	}
 
 	db, err := sql.Open("mssql", connstr)
 	if err != nil {
-		return errors.Wrap(err, "couldn't open connection to sql server")
+		return fmt.Errorf("couldn't open connection to sql server %s. %w", connstr, err)
 	}
 	defer db.Close()
 
@@ -45,25 +48,24 @@ func Run(connstr, path string) error {
 		}
 	}
 
-
 	return nil
 }
 
 func runsql(db *sql.DB, contents string) error {
 	tx, err := db.Begin()
 	if err != nil {
-		return errors.Wrap(err, "couldn't start transaction")
+		return fmt.Errorf("couldn't start transaction. %w", err)
 	}
 	_, err = db.Exec(contents)
 	if err != nil {
 		tx.Rollback()
-		return errors.Wrapf(err, "couldn't execute statement %s", contents)
+		return fmt.Errorf("couldn't execute statement %s. %w", contents, err)
 	}
 
 	err = tx.Commit()
 
 	if err != nil {
-		return errors.Wrap(err, "couldn't commit transaction")
+		return fmt.Errorf("couldn't commit transaction. %w", err)
 	}
 
 	return nil

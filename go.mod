@@ -1,11 +1,14 @@
 module github.com/jasontconnell/sqlrun
 
-go 1.16
+go 1.20
 
 require (
-	cloud.google.com/go v0.27.0 // indirect
-	github.com/denisenkom/go-mssqldb v0.0.0-20180901172138-1eb28afdf9b6
-	github.com/google/go-cmp v0.5.5 // indirect
-	github.com/jasontconnell/conf v1.0.0
-	golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2 // indirect
+	github.com/denisenkom/go-mssqldb v0.12.3
+	github.com/jasontconnell/conf v1.1.1
+)
+
+require (
+	github.com/golang-sql/civil v0.0.0-20190719163853-cb61b32ac6fe // indirect
+	github.com/golang-sql/sqlexp v0.1.0 // indirect
+	golang.org/x/crypto v0.9.0 // indirect
 )

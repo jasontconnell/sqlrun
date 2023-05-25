@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"regexp"
 
-	_ "github.com/denisenkom/go-mssqldb"
+	_ "github.com/microsoft/go-mssqldb"
 )
 
 var sepreg *regexp.Regexp = regexp.MustCompile(`\W(?i)go\W`)

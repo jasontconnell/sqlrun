@@ -3,8 +3,8 @@ module github.com/jasontconnell/sqlrun
 go 1.20
 
 require (
-	github.com/denisenkom/go-mssqldb v0.12.3
 	github.com/jasontconnell/conf v1.1.1
+	github.com/microsoft/go-mssqldb v0.21.0
 )
 
 require (

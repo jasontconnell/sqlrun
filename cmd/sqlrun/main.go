@@ -17,6 +17,7 @@ func main() {
 	p := flag.String("p", "", "priority prefixes. like tbl,Save,Get,Delete for filenames")
 	ex := flag.String("exclude", "", "exclude prefixes. like tbl,Save,Get,Delete for filenames")
 	filter := flag.String("filter", "", "filter to include filenames only containing the filter")
+	dry := flag.Bool("dry", false, "dry run")
 	flag.Parse()
 
 	start := time.Now()
@@ -34,6 +35,15 @@ func main() {
 	files, err := process.GetSqlFiles(baseDir, *p, *ex, *filter, "sql")
 	if err != nil {
 		log.Fatal("Got error getting sql files, ", err)
+	}
+
+	if *dry {
+		log.Println("Dry run")
+		for _, f := range files {
+			_, filename := filepath.Split(f)
+			log.Println(filename)
+		}
+		return
 	}
 
 	cfg := config.LoadConfig(*configFile)
